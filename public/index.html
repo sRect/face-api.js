@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .previewImg {width: 200px;}
+    .img-responsive {
+      display: inline-block;
+      height: auto;
+      max-width: 100%;
+    }
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1 id="h1">face-api</h1>
+    <input type="file" id="inputFile" accept="image/jpg,image/jpeg,image/png">
+    <button id="btn">getDetections</button>
+    <div id="imgWrap" class="previewImg">
+      <img id="previewImg" class="hide" src="" alt="img">
+      <canvas id="canvas" ></canvas>
+    </div>
+    
+    
+  </div>
+</body>
+</html>

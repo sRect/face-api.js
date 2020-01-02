@@ -1,0 +1,32 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "modules": false, // 模块使用 es modules ，不使用 commonJS 规范
+      "useBuiltIns": "usage", // usage-按需引入 entry-入口引入（整体引入） false-不引入polyfill
+      "corejs": 3 // 就是以前的babel-polyfill
+    }]
+  ],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { // 解析类的装饰器
+      "legacy": true
+    }],
+    ["@babel/plugin-proposal-class-properties", { // 解析class语法
+      "loose": true
+    }],
+    // https://babeljs.io/docs/en/babel-plugin-transform-runtime#docsNav
+    // 去除重复代码
+    // A plugin that enables the re-use of Babel's injected helper code to save on codesize
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        // 上面presets useBuiltIns写了，这里就不用写了
+        // "corejs": 3, // you can directly import "core-js" or use @babel/preset-env's useBuiltIns option.
+        "helpers": true, // 默认
+        "regenerator": false, // 通过 preset-env 已经使用了全局的 regeneratorRuntime, 不再需要 transform-runtime 提供的 不污染全局的 regeneratorRuntime
+        "useESModules": true // 使用 es modules helpers, 减少 commonJS 语法代码
+      }
+    ],
+    // https://babeljs.io/docs/en/next/babel-plugin-syntax-dynamic-import.html
+    "@babel/plugin-syntax-dynamic-import" // 懒加载
+  ]
+}
