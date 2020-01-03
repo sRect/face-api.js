@@ -6,27 +6,25 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
-    .previewImg {width: 200px;}
-    .img-responsive {
-      display: inline-block;
-      height: auto;
-      max-width: 100%;
-    }
-    .hide {
-      display: none;
-    }
+    .previewImg {width: auto; max-width: 800px;padding-top: 10px; position: relative;}
+    .img-responsive { display: inline-block; height: auto; max-width: 100%;}
+    .hide { display: none; }
+    .canvas {position: absolute; top : 0;left: 0;}
+    .faceExtractWrap {margin-top: 10px;}
+    .faceExtractWrap canvas {margin: 0 10px 10px 0};
   </style>
 </head>
 <body>
   <div id="app">
     <h1 id="h1">face-api</h1>
     <input type="file" id="inputFile" accept="image/jpg,image/jpeg,image/png">
-    <button id="btn">getDetections</button>
+    <button id="btn">detection</button>
+    <button id="faceExtractionBtn">face extraction头像提取</button>
     <div id="imgWrap" class="previewImg">
       <img id="previewImg" class="hide" src="" alt="img">
-      <canvas id="canvas" ></canvas>
+      <canvas id="canvas" class="canvas"></canvas>
     </div>
-    
+    <div id="faceExtractWrap" class="faceExtractWrap"></div>
     
   </div>
 </body>
