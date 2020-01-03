@@ -67,6 +67,10 @@ class Face extends ShowImage {
     this.canvas = document.querySelector("#canvas");
     this.faceExtractionBtn = document.querySelector("#faceExtractionBtn");
     this.faceExtractWrap = document.querySelector("#faceExtractWrap");
+    this.faceSimilarityBtn = document.querySelector("#faceSimilarityBtn");
+    this.normalWrap = document.querySelector(".normalWrap");
+    this.faceSimilaryWrap = document.querySelector(".faceSimilaryWrap");
+    this.faceSimilaryResult = document.querySelector("#faceSimilaryResult");
   }
 
   async loadWeight() { // 加载模型
@@ -128,9 +132,50 @@ class Face extends ShowImage {
     
   }
 
+  async handleFaceSimilary() { // 人脸相似度匹配
+    this.normalWrap.classList.add('hide');
+    this.faceSimilaryWrap.classList.remove('hide');
+
+    let descriptors = { desc1: null, desc2: null };
+    let img1Path = '/timg?image&quality=80&size=b9999_10000&sec=1578055497359&di=b0c7c64e034d028ea18bef37f3b99ec7&imgtype=0&src=http%3A%2F%2Fwx4.sinaimg.cn%2Flarge%2Fa9395713ly1g17zeaheylj20e40e4wig.jpg';
+    let img2Path = '/timg?image&quality=80&size=b9999_10000&sec=1578055530393&di=f95e50a2f8b053e9d512a2b7a3628ee9&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F6f4982a2ef65821da1107e789a1510e6a9e4d291.jpg';
+
+    function handler(status, imgPath) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = imgPath;
+        img.onload = async () => {
+          this.faceSimilaryWrap.appendChild(img);
+          const input = await faceapi.fetchImage(imgPath)
+          descriptors[status] = await faceapi.computeFaceDescriptor(input);
+          resolve(descriptors);
+        }
+      })
+    }
+    
+    await handler.call(this, "desc1", img1Path);
+    await handler.call(this, "desc2", img2Path);
+    console.log("descriptors", descriptors);
+    if (descriptors.desc1 && descriptors.desc2) {
+      const threshold = 0.6;
+      const distance = faceapi.utils.round(
+        faceapi.euclideanDistance(descriptors.desc1, descriptors.desc2)
+      );
+      let text = distance;
+      let bgColor = '#ffffff'
+      if (distance > threshold) {
+        text += ' (no match)'
+        bgColor = '#ce7575'
+      };
+      this.faceSimilaryResult.innerText = text;
+      this.faceSimilaryResult.style.backgroundColor = bgColor;
+    }
+  }
+
   bindEvents() {
     this.btn.addEventListener("click", this.getDetections.bind(this));
     this.faceExtractionBtn.addEventListener('click', this.handleFaceExtractions.bind(this));
+    this.faceSimilarityBtn.addEventListener('click', this.handleFaceSimilary.bind(this));
   }
 
   init() {
