@@ -62,7 +62,7 @@ class Face extends ShowImage {
   constructor() {
     super();
 
-    this.file = null;
+    // this.file = null;
     this.btn = document.querySelector("#btn");
     this.canvas = document.querySelector("#canvas");
     this.faceExtractionBtn = document.querySelector("#faceExtractionBtn");
@@ -71,6 +71,9 @@ class Face extends ShowImage {
     this.normalWrap = document.querySelector(".normalWrap");
     this.faceSimilaryWrap = document.querySelector(".faceSimilaryWrap");
     this.faceSimilaryResult = document.querySelector("#faceSimilaryResult");
+    this.videoFaceTrackingBtn = document.querySelector("#videoFaceTrackingBtn");
+    this.videoWrap = document.querySelector("#videoWrap");
+    this.overlayCanvas = document.querySelector("#overlay");
   }
 
   async loadWeight() { // 加载模型
@@ -83,6 +86,9 @@ class Face extends ShowImage {
 
   async getDetections() { // 进行识别
     const previewImg = this.previewImg;
+
+    if (!showImage.file) return alert("请选择图片！");
+
     if (previewImg) {
       const canvas = this.canvas;
       const minProbability = 0.05;
@@ -116,6 +122,7 @@ class Face extends ShowImage {
   }
 
   async handleFaceExtractions() { // 人脸提取
+    if (!showImage.file) return alert("请选择图片！");
     const previewImg = this.previewImg;
     if (previewImg) {
       const canvas = this.canvas;
@@ -132,13 +139,13 @@ class Face extends ShowImage {
     
   }
 
-  async handleFaceSimilary() { // 人脸相似度匹配
+  async handleFaceSimilary() { // 人脸相似度匹配(网络图片)
     this.normalWrap.classList.add('hide');
     this.faceSimilaryWrap.classList.remove('hide');
 
     let descriptors = { desc1: null, desc2: null };
-    let img1Path = '/timg?image&quality=80&size=b9999_10000&sec=1578055497359&di=b0c7c64e034d028ea18bef37f3b99ec7&imgtype=0&src=http%3A%2F%2Fwx4.sinaimg.cn%2Flarge%2Fa9395713ly1g17zeaheylj20e40e4wig.jpg';
-    let img2Path = '/timg?image&quality=80&size=b9999_10000&sec=1578055530393&di=f95e50a2f8b053e9d512a2b7a3628ee9&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F6f4982a2ef65821da1107e789a1510e6a9e4d291.jpg';
+    let img1Path = 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=172247787,4269461981&fm=26&gp=0.jpg';
+    let img2Path = 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3796449256,3708092102&fm=26&gp=0.jpg';
 
     function handler(status, imgPath) {
       return new Promise((resolve, reject) => {
@@ -172,10 +179,45 @@ class Face extends ShowImage {
     }
   }
 
+  async handleVideoFaceTracking() {
+    this.videoWrap.classList.remove("hide");
+    const videoEl = this.videoWrap.querySelector("video");
+    // videoEl.src = 'static/video/1582447530235301.mp4';
+
+    if (!videoEl.currentTime || videoEl.paused || videoEl.ended) {
+      return setTimeout(() => this.handleVideoFaceTracking());
+    }
+
+    const options = new faceapi.SsdMobilenetv1Options();
+    // const ts = Date.now();
+    const drawBoxes = true; // 是否绘画人脸框
+    const drawLandmarks = false; // 是否绘制人脸特征
+    const withFaceLandmarks = false;
+
+    let task = faceapi.detectAllFaces(videoEl, options);
+    task = withFaceLandmarks ? task.withFaceLandmarks() : task;
+    const results = await task;
+
+    const dims = faceapi.matchDimensions(this.overlayCanvas, videoEl, true);
+    const resizedResults = faceapi.resizeResults(results, dims);
+
+    console.log(resizedResults);
+
+    if (drawBoxes) {
+      faceapi.draw.drawDetections(this.overlayCanvas, resizedResults)
+    }
+    if (drawLandmarks) {
+      faceapi.draw.drawFaceLandmarks(this.overlayCanvas, resizedResults)
+    }
+
+    setTimeout(() => this.handleVideoFaceTracking());
+  }
+
   bindEvents() {
     this.btn.addEventListener("click", this.getDetections.bind(this));
     this.faceExtractionBtn.addEventListener('click', this.handleFaceExtractions.bind(this));
     this.faceSimilarityBtn.addEventListener('click', this.handleFaceSimilary.bind(this));
+    this.videoFaceTrackingBtn.addEventListener('click', this.handleVideoFaceTracking.bind(this));
   }
 
   init() {

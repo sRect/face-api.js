@@ -11,6 +11,7 @@ module.exports = env => {
   const isDev = env.development ? 'development' : 'production';
   return {
     mode: isDev,
+    devtool: 'eval-source-map',
     entry: path.resolve(__dirname, './src/js/index.js'),
     output: {
       filename: '[name].[hash:8].js',
