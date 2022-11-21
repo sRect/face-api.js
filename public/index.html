@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="screen-orientation" content="portrait" />
+  <meta name="x5-orientation" content="portrait">
+  <title>抖音图片选择器</title>
   <style>
-    .previewImg {width: auto; max-width: 800px;padding-top: 10px; position: relative;}
-    .img-responsive { display: inline-block; height: auto; max-width: 100%;}
-    .hide { display: none; }
-    canvas {display: inline-block; vertical-align: baseline;}
-    .canvas {position: absolute; top : 0;left: 0;}
-    .faceExtractWrap {margin-top: 10px;}
-    .faceExtractWrap canvas {margin: 0 10px 10px 0};
+    * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .root {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .start {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .video {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
   </style>
 </head>
+
 <body>
-  <div id="app">
-    <h1 id="h1">face-api</h1>
-    <input type="file" id="inputFile" accept="image/jpg,image/jpeg,image/png">
-    <button id="btn">detection</button>
-    <button id="faceExtractionBtn">face extraction头像提取</button>
-    <button id="faceSimilarityBtn">人脸相似度匹配</button>
-    <button id="videoFaceTrackingBtn">人脸动态追踪</button>
-    <hr>
-    <div class="normalWrap">
-      <div id="imgWrap" class="previewImg">
-        <img id="previewImg" class="hide" src="" alt="img">
-        <canvas id="canvas" class="canvas"></canvas>
-      </div>
-      <div id="faceExtractWrap" class="faceExtractWrap"></div>
+  <div id="root" class="root">
+    <div class="start">
+      <!-- <label for="openUserCamers">请使用手机浏览器打开</label> -->
+      <!-- 打开前置摄像头 -->
+      <input type="file" id="openUserCamers" capture="camera" accept="video/*" />
     </div>
-    <div class="faceSimilaryWrap hide">
-      <p>例如下面两张图片</p>
-      <p>相似度：<strong id="faceSimilaryResult"></strong></p>
-    </div>
-    <div id="videoWrap" class="videoWrap hide">
-      <!-- <b>假定嫌疑人是:<b style="color: red;">张益达</b></p> -->
-      <div style="position: relative;">
-        <video src="static/video/1582447530235301.mp4"  autoplay muted loop playsinlin></video>
-        <canvas id="overlay" style="position: absolute; top: 0; left: 0;"/>
-      </div>
-    </div>
+    <video id="video" class="video" playsinline autoplay muted></video>
   </div>
 </body>
+
 </html>
