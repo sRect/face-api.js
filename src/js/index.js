@@ -7,6 +7,7 @@ class App {
     this.video = document.querySelector("#video");
     this.startBtn = document.querySelector("#startBtn");
     this.closeBtn = document.querySelector("#closeBtn");
+    this.imgSelectWrap = document.querySelector("#imgSelectWrap");
   }
 
   async loadWeight() {
@@ -24,8 +25,9 @@ class DyImageSelect extends App {
   constructor() {
     super();
 
-    this.width = window.screen.width * window.devicePixelRatio;
-    this.height = window.screen.height * window.devicePixelRatio;
+    // window.devicePixelRatio
+    this.width = document.documentElement.clientWidth;
+    this.height = document.documentElement.clientHeight;
   }
 
   // 获取摄像头视频流
@@ -39,8 +41,10 @@ class DyImageSelect extends App {
           video: {
             facingMode: "user", // 前置摄像头
             // facingMode: { exact: "environment" }，// 后置摄像头
-            width: { min: 1280, max: 1920 },
-            height: { min: 720, max: 1280 },
+            // width: { min: 1280, max: 1920 },
+            // height: { min: 720, max: 1280 },
+            width: this.width,
+            height: this.height,
           },
         });
 
@@ -64,6 +68,7 @@ class DyImageSelect extends App {
     this.video.onloadedmetadata = () => {
       this.startBtn.classList.add("hidden");
       this.closeBtn.classList.remove("hidden");
+      this.imgSelectWrap.classList.remove("hidden");
       this.video.play();
     };
   }
@@ -72,6 +77,7 @@ class DyImageSelect extends App {
   async closeCamera() {
     this.startBtn.classList.remove("hidden");
     this.closeBtn.classList.add("hidden");
+    this.imgSelectWrap.classList.add("hidden");
     // https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
     const tracks = this.video.srcObject.getTracks();
 
