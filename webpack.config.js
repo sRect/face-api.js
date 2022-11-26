@@ -141,7 +141,7 @@ module.exports = (env) => {
       compress: true,
       hot: true,
       open: true,
-      host: "192.168.1.5",
+      host: "localhost",
       historyApiFallback: true, // 该选项的作用所有的404都连接到index.html
       proxy: {
         // 代理到后端的服务地址，会拦截所有以api开头的请求地址

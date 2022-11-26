@@ -1,11 +1,12 @@
 // import * as faceapi from "face-api.js";
 import Worker from "./face.worker.js";
-// import ikJPG from '@/assets/img/ik.jpg';
 
-class AppBase {
+class App {
   constructor() {
     this.worker = new Worker();
     this.video = document.querySelector("#video");
+    this.startBtn = document.querySelector("#startBtn");
+    this.closeBtn = document.querySelector("#closeBtn");
   }
 
   async loadWeight() {
@@ -17,190 +18,36 @@ class AppBase {
       console.log("worker加载失败", e);
     });
   }
-
-  //打开摄像头
-  async openUserMedia() {
-    //获取设备
-    this.deviceList = (await this.getDevice()) || [];
-    const isOpen = await this.getUserMedia();
-    if (isOpen.code == "ok") {
-      await this.createModel();
-      window.cancelAnimationFrame(this.task);
-      this.task = window.requestAnimationFrame(this.recognition);
-      // vant.Toast(`摄像头已打开`);
-    } else {
-      vant.Dialog.alert({
-        title: "失败",
-        message: `打开摄像头失败：${isOpen.errMsg}`,
-        theme: "round-button",
-      }).then(() => {
-        this.openUserMedia();
-      });
-      return;
-    }
-  }
-
-  getUserMedia() {
-    return new Promise(async (resolve) => {
-      this.isCameraOpen = false;
-      const toast = vant.Toast.loading({
-        duration: 0, // 持续展示 toast
-        forbidClick: true,
-        message: "打开摄像头",
-      });
-      let mediaOpts = {
-        audio: false,
-        video: true,
-        video: {
-          // width: this.width,
-          // height: this.height,
-          frameRate: {
-            ideal: 100,
-            max: 150,
-          }, //最佳帧率
-        },
-      };
-      if (this.deviceId === "user" || this.deviceId === "environment") {
-        mediaOpts.video.facingMode = this.deviceId;
-      } else if (this.deviceId) {
-        mediaOpts.video.deviceId = this.deviceId;
-      } else if (this.isPhone) {
-        mediaOpts.video.facingMode = "user";
-      }
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia(mediaOpts);
-        this.mediaStreamTrack = stream;
-        //获取设备
-        this.deviceList = (await this.getDevice()) || [];
-        let video = this.$refs["video"];
-        console.log(video);
-        video.pause();
-        video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
-        if ("srcObject" in video) {
-          video.srcObject = stream;
-        } else {
-          video.src = stream;
-        }
-        video.play();
-        video.onplaying = () => {
-          toast.clear();
-          // this.isCameraOpen = true;
-          this.$nextTick((_) => {
-            const { videoWidth, videoHeight } = this.$refs["video"];
-            console.log("videoWidth", videoWidth);
-            console.log("videoHeight", videoHeight);
-            this.canvasWidth = videoWidth;
-            this.canvasHeight = videoHeight;
-            this.isCameraOpen = true;
-          });
-          resolve({
-            code: `ok`,
-          });
-        };
-      } catch (error) {
-        toast.clear();
-        console.log(error);
-        console.error(error);
-        resolve({
-          errMsg: error,
-        });
-      }
-    });
-  }
-  //获取设备信息
-  getDevice() {
-    return new Promise(async (resolve) => {
-      const toast = vant.Toast.loading({
-        duration: 0, // 持续展示 toast
-        forbidClick: true,
-        message: "获取设备中",
-      });
-      try {
-        const arr = [];
-        if (this.isPhone) {
-          arr.push(
-            {
-              name: "前置摄像头",
-              deviceId: "user",
-            },
-            {
-              name: "后置摄像头",
-              deviceId: "environment",
-            }
-          );
-        } else {
-          const devicesList = await navigator.mediaDevices.enumerateDevices();
-          (devicesList || []).forEach((e) => {
-            e.name = e.label || e.deviceId;
-            if (
-              e.kind === "videoinput" &&
-              e.deviceId &&
-              !e.name.includes("麦克风")
-            ) {
-              e.color = e.deviceId == this.deviceId ? "#1989fa" : "#323233";
-              arr.push(e);
-            }
-          });
-        }
-        toast.clear();
-        resolve(arr);
-      } catch (error) {
-        toast.clear();
-        console.log(error);
-        resolve([]);
-      }
-    });
-  }
 }
 
-class DyImageSelect extends AppBase {
+class DyImageSelect extends App {
   constructor() {
     super();
+
+    this.width = window.screen.width * window.devicePixelRatio;
+    this.height = window.screen.height * window.devicePixelRatio;
   }
 
+  // 获取摄像头视频流
   async getUserMedia() {
-    // navigator.getUserMedia =
-    //   navigator.getUserMedia ||
-    //   navigator.webkitGetUserMedia ||
-    //   navigator.mozGetUserMedia ||
-    //   navigator.msGetUserMedia; //获取媒体对象（这里指摄像头）
-    // navigator.getUserMedia(
-    //   {
-    //     video: true,
-    //   },
-    //   gotStream,
-    //   noStream
-    // ); //参数1获取用户打开权限；参数二成功打开后调用，并传一个视频流对象，参数三打开失败后调用，传错误信息
-
-    // function gotStream(stream) {
-    //   this.video.src = URL.createObjectURL(stream);
-    //   this.video.onerror = function () {
-    //     stream.stop();
-    //   };
-    //   stream.onended = noStream;
-    //   this.video.onloadedmetadata = function () {
-    //     alert("摄像头成功打开！");
-    //   };
-    // }
-
-    // function noStream(err) {
-    //   alert(err);
-    // }
-
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: true,
-        // video: {
-        //   facingMode: "user",
-        //   width: window.innerWidth,
-        //   height: window.innerHeight,
-        // },
-      });
+      try {
+        // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#examples
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: true,
+          video: {
+            facingMode: "user", // 前置摄像头
+            // facingMode: { exact: "environment" }，// 后置摄像头
+            width: { min: 1280, max: 1920 },
+            height: { min: 720, max: 1280 },
+          },
+        });
 
-      this.video.src = stream;
-
-      return;
+        return Promise.resolve(stream);
+      } catch (error) {
+        return Promise.reject();
+      }
     }
 
     const errorMessage =
@@ -208,15 +55,48 @@ class DyImageSelect extends AppBase {
     alert(errorMessage);
   }
 
+  // 打开摄像头
+  async openCamera(e) {
+    e.stopPropagation();
+
+    const stream = await this.getUserMedia();
+    this.video.srcObject = stream;
+    this.video.onloadedmetadata = () => {
+      this.startBtn.classList.add("hidden");
+      this.closeBtn.classList.remove("hidden");
+      this.video.play();
+    };
+  }
+
+  // 关闭摄像头
+  async closeCamera() {
+    this.startBtn.classList.remove("hidden");
+    this.closeBtn.classList.add("hidden");
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack/stop
+    const tracks = this.video.srcObject.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    this.video.srcObject.srcObject = null;
+  }
+
   init() {
     this.loadWeight();
 
-    this.worker.addEventListener("message", async (data) => {
+    this.worker.addEventListener("message", (data) => {
       console.log("主线程收到消息==>", data);
       if (data.data.loadEnd) {
-        await this.getUserMedia();
+        this.startBtn.removeAttribute("disabled");
       }
     });
+
+    const handleOpenCamera = this.openCamera.bind(this);
+    const handleCloseCamera = this.closeCamera.bind(this);
+
+    this.startBtn.addEventListener("click", handleOpenCamera);
+    this.closeBtn.addEventListener("click", handleCloseCamera);
   }
 }
 

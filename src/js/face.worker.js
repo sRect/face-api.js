@@ -1,15 +1,5 @@
-// import "../utils/faceEnvWorkerPatch";
 self.importScripts("static/js/faceEnvWorkerPatch.js");
-// import * as faceapi from "face-api.js";
 self.importScripts("static/js/face-api.min.js");
-// faceapi.env.setEnv(faceapi.env.createNodejsEnv());
-
-// faceapi.env.monkeyPatch({
-//   Canvas: OffscreenCanvas,
-//   createCanvasElement: () => {
-//     return new OffscreenCanvas(480, 270);
-//   },
-// });
 
 class FaceApi {
   static async loadWeight() {
@@ -43,6 +33,10 @@ self.addEventListener(
       self.postMessage({
         loadEnd: true,
       });
+
+      self.close();
+
+      console.log("子线程已关闭==>");
     }
   },
   false
