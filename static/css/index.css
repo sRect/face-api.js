@@ -1,0 +1,276 @@
+html {
+  line-height: 1.75;
+  font-size: 1.25em;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f6f6f6;
+}
+
+.root {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.warn {
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  height: 20px;
+  background-color: rgba(235, 177, 0, .8);
+  text-align: center;
+  line-height: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.start {
+  position: absolute;
+  z-index: 1;
+}
+
+.btn {
+  font-size: 18px;
+  color: #fff;
+  background-color: #5bc0de;
+  border: 0;
+  border-radius: 4px;
+  padding: 4px 14px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.btn[disabled="disabled"] {
+  background-color: #ccc;
+}
+
+.loading {
+  padding-right: 30px;
+  background: url("../img/loading.gif") #5bc0de 90% center no-repeat;
+  background-size: 16px 16px;
+}
+
+.closeBtn {
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.3);
+  top: 5px;
+  left: 5px;
+  transform: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  transform: rotateY(180deg);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+.imgSelectWrap {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  /* animation: imgSelectLeftActive 1s linear; */
+  animation-fill-mode: forwards;
+}
+
+.imgSelectRightActive {
+  animation: imgSelectRightActive 1s linear;
+  animation-fill-mode: forwards;
+}
+
+.imgSelectLeftActive {
+  animation: imgSelectLeftActive 1s linear;
+  animation-fill-mode: forwards;
+}
+
+.imgSelectWrap .inWrap {
+  width: 200px;
+  height: 100px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 6px solid #eef4fd;
+  position: relative;
+}
+
+.imgSelectWrap .inWrap .txt {
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+
+.imgSelectWrap .inWrap .heart {
+  width: 30px;
+  height: 30px;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background-color: #fff;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%) rotateZ(0deg) scale(1);
+  /* animation: rightHeartMove 0.5s linear; */
+  /* animation-iteration-count: 1; */
+  /* animation-timing-function: ease-in-out; */
+  animation-fill-mode: forwards;
+  z-index: 2;
+}
+
+.heartLeftActive {
+  animation: leftHeartMove 0.5s linear;
+}
+
+.heartRightActive {
+  animation: rightHeartMove 0.5s linear;
+}
+
+.imgSelectWrap .inWrap .left {
+  width: 80px;
+  height: 80px;
+  padding: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 4px;
+  position: absolute;
+  left: -60px;
+  bottom: -60px;
+  overflow: hidden;
+  transform: rotateZ(0deg) scale(1);
+  /* animation: leftImg 0.5s ease-out; */
+  animation-fill-mode: forwards;
+  animation-delay: 0.3s;
+}
+
+.leftActive {
+  animation: leftImg 0.5s ease-out;
+}
+
+.imgSelectWrap .inWrap .right {
+  width: 80px;
+  height: 80px;
+  padding: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 4px;
+  position: absolute;
+  right: -60px;
+  bottom: -60px;
+  overflow: hidden;
+  transform: rotateZ(0deg) scale(1);
+  /* animation: rightImg 0.5s ease-out; */
+  animation-fill-mode: forwards;
+  animation-delay: 0.3s;
+}
+
+.rightActive {
+  animation: rightImg 0.5s ease-out;
+}
+
+.imgSelectWrap .inWrap img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+@keyframes imgSelectRightActive {
+  from {
+    top: 20px;
+    left: 50%;
+  }
+
+  to {
+    top: 20px;
+    left: 45%;
+  }
+}
+
+@keyframes imgSelectLeftActive {
+  from {
+    top: 20px;
+    left: 50%;
+  }
+
+  to {
+    top: 20px;
+    left: 55%;
+  }
+}
+
+@keyframes leftImg {
+  from {
+    transform: rotateZ(0deg) scale(1);
+  }
+
+  to {
+    transform: rotateZ(-15deg) scale(1.5);
+  }
+}
+
+@keyframes rightImg {
+  from {
+    transform: rotateZ(0deg) scale(1);
+  }
+
+  to {
+    transform: rotateZ(15deg) scale(1.5);
+  }
+}
+
+@keyframes leftHeartMove {
+  from {
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) rotateZ(0deg) scale(1);
+  }
+
+  to {
+    top: 65px;
+    left: -13%;
+    transform: translateX(-50%) rotateZ(-15deg) scale(1.2);
+  }
+}
+
+@keyframes rightHeartMove {
+  from {
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) rotateZ(0deg) scale(1);
+  }
+
+  to {
+    top: 65px;
+    left: 95%;
+    transform: translateX(100%) rotateZ(15deg) scale(1.2);
+  }
+}
