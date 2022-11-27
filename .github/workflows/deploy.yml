@@ -39,7 +39,7 @@ jobs:
       - name: deploy
         uses: JamesIves/github-pages-deploy-action@4.1.6
         with:
-          access_token: ${{ secrets.FACE_RES_ACCESS_TOKEN  }}
+          access_token: ${{ secrets.MY_ACCESS_TOKEN  }}
           # 发布到指定分支
           branch: gh-pages
           # 指定发布的打包后的文件
