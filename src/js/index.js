@@ -75,19 +75,19 @@ class App {
   async loadWeight() {
     // 加载模型
     await faceapi.nets.ssdMobilenetv1.load(
-      "/static/weights/ssd_mobilenetv1_model-weights_manifest.json"
+      "./static/weights/ssd_mobilenetv1_model-weights_manifest.json"
     );
     await faceapi.nets.faceLandmark68Net.load(
-      "/static/weights/face_landmark_68_model-weights_manifest.json"
+      "./static/weights/face_landmark_68_model-weights_manifest.json"
     );
     // await faceapi.nets.faceExpressionNet.load(
     //   "/static/weights/face_expression_model-weights_manifest.json"
     // );
-    await faceapi.nets.faceRecognitionNet.load(
-      "/static/weights/face_recognition_model-weights_manifest.json"
-    );
+    // await faceapi.nets.faceRecognitionNet.load(
+    //   "./static/weights/face_recognition_model-weights_manifest.json"
+    // );
     await faceapi.nets.ageGenderNet.load(
-      "/static/weights/age_gender_model-weights_manifest.json"
+      "./static/weights/age_gender_model-weights_manifest.json"
     );
 
     console.log("模型加载完成");
