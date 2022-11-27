@@ -1,0 +1,46 @@
+name: build and deploy ci
+
+on:
+  push: # push 时触发ci
+    branches: [dy] # 作用于master分支
+# pull_request:
+#   branches: [master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      # 拉取master分支代码
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 指定nodejs版本
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      # 安装依赖
+      - name: install
+        run: sudo npm install
+
+      # 打包
+      - name: build
+        run: sudo npm run build:prod
+
+      # 部署到gh-pages分支
+      - name: deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.6
+        with:
+          access_token: ${{ secrets.FACE_RES_ACCESS_TOKEN  }}
+          # 发布到指定分支
+          branch: gh-pages
+          # 指定发布的打包后的文件
+          folder: dist
