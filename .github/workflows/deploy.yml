@@ -37,10 +37,9 @@ jobs:
 
       # 部署到gh-pages分支
       - name: deploy
-        uses: iranzo/gh-pages-jekyll-action@1.0.2
+        uses: Cecilapp/GitHub-Pages-deploy@v3
         env:
-          # GITHUB_TOKEN: ${{ secrets.MY_ACCESS_TOKEN  }}
-          # 发布到指定分支
-          GH_PAGES_BRANCH: gh-pages
-          # 指定发布的打包后的文件
-          SOURCE_FOLDER: dist
+          GITHUB_TOKEN: ${{ secrets.MY_ACCESS_TOKEN }}
+        with:
+          # email: username@domain.tld
+          build_dir: dist
