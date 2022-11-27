@@ -126,16 +126,16 @@ class DyImageSelect extends App {
 
     this.imgSlectObj = {
       male: [
-        ["/static/img/girl1.jpg", "/static/img/rmb1.jpg"],
-        ["/static/img/girl3.jpg", "/static/img/rmb2.jpg"],
-        ["/static/img/girl2.jpg", "/static/img/gold.png"],
-        ["/static/img/girl4.png", "/static/img/ayst.png"],
+        ["./static/img/girl1.jpg", "./static/img/rmb1.jpg"],
+        ["./static/img/girl3.jpg", "./static/img/rmb2.jpg"],
+        ["./static/img/girl2.jpg", "./static/img/gold.png"],
+        ["./static/img/girl4.png", "./static/img/ayst.png"],
       ],
       female: [
-        ["/static/img/boy1.png", "/static/img/boy2.png"],
-        ["/static/img/boy3.png", "/static/img/boy4.png"],
-        ["/static/img/boy5.png", "/static/img/boy6.png"],
-        ["/static/img/boy7.png", "/static/img/boy8.png"],
+        ["./static/img/boy1.png", "./static/img/boy2.png"],
+        ["./static/img/boy3.png", "./static/img/boy4.png"],
+        ["./static/img/boy5.png", "./static/img/boy6.png"],
+        ["./static/img/boy7.png", "./static/img/boy8.png"],
       ],
     };
   }
