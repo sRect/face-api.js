@@ -93,6 +93,18 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+  /* animation: imgSelectLeftActive 1s linear; */
+  animation-fill-mode: forwards;
+}
+
+.imgSelectRightActive {
+  animation: imgSelectRightActive 1s linear;
+  animation-fill-mode: forwards;
+}
+
+.imgSelectLeftActive {
+  animation: imgSelectLeftActive 1s linear;
+  animation-fill-mode: forwards;
 }
 
 .imgSelectWrap .inWrap {
@@ -126,7 +138,7 @@ body {
   position: absolute;
   top: -15px;
   left: 50%;
-  transform: translateX(-50%) rotateZ(0deg);
+  transform: translateX(-50%) rotateZ(0deg) scale(1);
   /* animation: rightHeartMove 0.5s linear; */
   /* animation-iteration-count: 1; */
   /* animation-timing-function: ease-in-out; */
@@ -191,13 +203,37 @@ body {
   object-fit: cover;
 }
 
+@keyframes imgSelectRightActive {
+  from {
+    top: 20px;
+    left: 50%;
+  }
+
+  to {
+    top: 20px;
+    left: 45%;
+  }
+}
+
+@keyframes imgSelectLeftActive {
+  from {
+    top: 20px;
+    left: 50%;
+  }
+
+  to {
+    top: 20px;
+    left: 55%;
+  }
+}
+
 @keyframes leftImg {
   from {
     transform: rotateZ(0deg) scale(1);
   }
 
   to {
-    transform: rotateZ(-15deg) scale(1.1);
+    transform: rotateZ(-15deg) scale(1.5);
   }
 }
 
@@ -207,7 +243,7 @@ body {
   }
 
   to {
-    transform: rotateZ(15deg) scale(1.1);
+    transform: rotateZ(15deg) scale(1.5);
   }
 }
 
@@ -215,13 +251,13 @@ body {
   from {
     top: -15px;
     left: 50%;
-    transform: translateX(-50%) rotateZ(0deg);
+    transform: translateX(-50%) rotateZ(0deg) scale(1);
   }
 
   to {
     top: 65px;
     left: -13%;
-    transform: translateX(-50%) rotateZ(-15deg);
+    transform: translateX(-50%) rotateZ(-15deg) scale(1.2);
   }
 }
 
@@ -229,12 +265,12 @@ body {
   from {
     top: -15px;
     left: 50%;
-    transform: translateX(-50%) rotateZ(0deg);
+    transform: translateX(-50%) rotateZ(0deg) scale(1);
   }
 
   to {
     top: 65px;
     left: 95%;
-    transform: translateX(100%) rotateZ(15deg);
+    transform: translateX(100%) rotateZ(15deg) scale(1.2);
   }
 }
