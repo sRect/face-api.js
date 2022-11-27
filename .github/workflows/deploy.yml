@@ -39,7 +39,7 @@ jobs:
       - name: deploy
         uses: iranzo/gh-action-runpublish@0.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_ACCESS_TOKEN  }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN  }}
           # 发布到指定分支
           # branch: gh-pages
           # 指定发布的打包后的文件
