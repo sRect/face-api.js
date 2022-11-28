@@ -6,7 +6,7 @@ import * as faceapi from "face-api.js";
 class App {
   constructor() {
     this.closed = true;
-    this.timer = null;
+    this.raf = null;
     this.next = false;
     this.curSlectIndex = 0; // 当前选择的进度
     this.curSelectStatus = ""; // 选择的左侧还是右侧
@@ -95,7 +95,7 @@ class App {
 
   async handleVideoFaceTracking(cb) {
     if (this.closed) {
-      clearTimeout(this.timer);
+      window.cancelAnimationFrame(this.raf);
       this.imgSelectWrap.classList.add("hidden");
       return;
     }
@@ -113,7 +113,7 @@ class App {
     // console.log("resizedResults==>", resizedResults);
     cb && cb(resizedResults);
 
-    this.timer = setTimeout(() => this.handleVideoFaceTracking(cb));
+    this.raf = requestAnimationFrame(() => this.handleVideoFaceTracking(cb));
   }
 }
 
@@ -203,7 +203,7 @@ class DyImageSelect extends App {
   // 关闭摄像头
   async closeCamera() {
     this.closed = true;
-    clearTimeout(this.timer);
+    window.cancelAnimationFrame(this.raf);
     this.imgSelectWrap.classList.add("hidden");
     this.startBtn.classList.remove("loading");
     this.startBtn.classList.remove("hidden");
@@ -328,8 +328,9 @@ class DyImageSelect extends App {
   }
 
   async init() {
+    this.startBtn.innerHTML = "正在初始化...";
     await this.loadWeight();
-
+    this.startBtn.innerHTML = "打开摄像头";
     this.startBtn.removeAttribute("disabled");
 
     const handleOpenCamera = this.openCamera.bind(this);
