@@ -151,10 +151,10 @@ class DyImageSelect extends App {
           video: {
             facingMode: "user", // 前置摄像头
             // facingMode: { exact: "environment" }，// 后置摄像头
-            // width: { min: 1280, max: 1920 },
-            // height: { min: 720, max: 1280 },
-            width: this.width,
-            height: this.height,
+            width: { min: 1280, max: 1920 },
+            height: { min: 720, max: 1280 },
+            // width: this.width,
+            // height: this.height,
           },
         });
 
