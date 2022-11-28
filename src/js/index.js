@@ -96,6 +96,7 @@ class App {
   async handleVideoFaceTracking(cb) {
     if (this.closed) {
       clearTimeout(this.timer);
+      this.imgSelectWrap.classList.add("hidden");
       return;
     }
 
@@ -151,8 +152,8 @@ class DyImageSelect extends App {
           video: {
             facingMode: "user", // 前置摄像头
             // facingMode: { exact: "environment" }，// 后置摄像头
-            width: { min: 1280, max: 1920 },
-            height: { min: 720, max: 1280 },
+            // width: { min: 1280, max: 1920 },
+            // height: { min: 720, max: 1080 },
             // width: this.width,
             // height: this.height,
           },
@@ -176,22 +177,27 @@ class DyImageSelect extends App {
     this.startBtn.setAttribute("disabled", "disabled");
     this.startBtn.classList.add("loading");
 
-    const stream = await this.getUserMedia();
-    this.video.srcObject = stream;
-    this.video.onloadedmetadata = async () => {
-      this.startBtn.classList.remove("loading");
-      this.startBtn.classList.add("hidden");
-      this.closeBtn.classList.remove("hidden");
+    try {
+      const stream = await this.getUserMedia();
+      this.video.srcObject = stream;
+      this.video.onloadedmetadata = async () => {
+        this.startBtn.classList.remove("loading");
+        this.startBtn.classList.add("hidden");
+        this.closeBtn.classList.remove("hidden");
 
-      this.video.play();
+        this.video.play();
 
-      let img1 = this.left.querySelector("img");
-      let img2 = this.right.querySelector("img");
-      img1.src = this.imgSlectObj.male[this.curSlectIndex][0];
-      img2.src = this.imgSlectObj.male[this.curSlectIndex][1];
+        let img1 = this.left.querySelector("img");
+        let img2 = this.right.querySelector("img");
+        img1.src = this.imgSlectObj.male[this.curSlectIndex][0];
+        img2.src = this.imgSlectObj.male[this.curSlectIndex][1];
 
-      await this.handleVideoFaceTracking(this.handleFaceData.bind(this));
-    };
+        await this.handleVideoFaceTracking(this.handleFaceData.bind(this));
+      };
+    } catch (error) {
+      console.log(error);
+      alert("打开摄像头失败");
+    }
   }
 
   // 关闭摄像头
